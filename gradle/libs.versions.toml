@@ -1,7 +1,7 @@
 [versions]
 velocity = "3.1.1"
 darkcubesystem = "1.0.19-SNAPSHOT"
-discord4j = "3.2.5"
+discord4j = "3.2.6"
 cloudnet = "4.0.0-RC11-SNAPSHOT"
 discordbot-api = "1.0.2"
 
