@@ -30,5 +30,4 @@ dependencies {
     compileOnly(libs.cloudnet.bridge)
     compileOnly(libs.cloudnet.driver)
     implementation(libs.discordbot.api)
-//    implementation(libs.discord4j)
 }

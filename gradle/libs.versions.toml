@@ -1,7 +1,6 @@
 [versions]
 velocity = "3.1.1"
 darkcubesystem = "1.0.19-SNAPSHOT"
-discord4j = "3.2.5"
 cloudnet = "4.0.0-RC11-SNAPSHOT"
 discordbot-api = "1.0.2"
 
@@ -10,7 +9,6 @@ shadow = "8.3.0"
 [libraries]
 velocity = { group = "com.velocitypowered", name = "velocity-api", version.ref = "velocity" }
 darkcubesystem-api = { group = "eu.darkcube.system", name = "darkcubesystem-api", version.ref = "darkcubesystem" }
-discord4j = { group = "com.discord4j", name = "discord4j-core", version.ref = "discord4j" }
 cloudnet-bridge = { group = "eu.darkcube.cloudnetservice.cloudnet", name = "bridge", version.ref = "cloudnet" }
 cloudnet-driver = { group = "eu.darkcube.cloudnetservice.cloudnet", name = "driver", version.ref = "cloudnet" }
 discordbot-api = { group = "eu.darkcube.discordbot", name = "api", version.ref = "discordbot-api" }
