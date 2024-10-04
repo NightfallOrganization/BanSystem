@@ -1,11 +1,11 @@
 [versions]
 velocity = "3.1.1"
-darkcubesystem = "1.0.19-SNAPSHOT"
+darkcubesystem = "1.0.31"
 cloudnet = "4.0.0-RC11-SNAPSHOT"
 discordbot-api = "1.0.2"
 paper = "1.21.1-R0.1-SNAPSHOT"
 
-shadow = "8.3.0"
+shadow = "8.3.1"
 
 [libraries]
 velocity = { group = "com.velocitypowered", name = "velocity-api", version.ref = "velocity" }
