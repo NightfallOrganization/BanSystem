@@ -3,6 +3,7 @@ velocity = "3.1.1"
 darkcubesystem = "1.0.19-SNAPSHOT"
 cloudnet = "4.0.0-RC11-SNAPSHOT"
 discordbot-api = "1.0.2"
+paper = "1.21.1-R0.1-SNAPSHOT"
 
 shadow = "8.3.0"
 
@@ -12,6 +13,7 @@ darkcubesystem-api = { group = "eu.darkcube.system", name = "darkcubesystem-api"
 cloudnet-bridge = { group = "eu.darkcube.cloudnetservice.cloudnet", name = "bridge", version.ref = "cloudnet" }
 cloudnet-driver = { group = "eu.darkcube.cloudnetservice.cloudnet", name = "driver", version.ref = "cloudnet" }
 discordbot-api = { group = "eu.darkcube.discordbot", name = "api", version.ref = "discordbot-api" }
+paper-api = {group = "io.papermc.paper", name = "paper-api", version.ref="paper" }
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

@@ -26,6 +26,7 @@ tasks {
 dependencies {
     annotationProcessor(libs.velocity)
     compileOnly(libs.velocity)
+    compileOnly(libs.paper.api)
     compileOnly(libs.darkcubesystem.api)
     compileOnly(libs.cloudnet.bridge)
     compileOnly(libs.cloudnet.driver)

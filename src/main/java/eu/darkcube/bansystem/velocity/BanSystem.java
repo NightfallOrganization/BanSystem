@@ -1,17 +1,26 @@
-package eu.darkcube.bansystem;
+/*
+ * Copyright (c) 2024. [DarkCube]
+ * All rights reserved.
+ * You may not use or redistribute this software or any associated files without permission.
+ * The above copyright notice shall be included in all copies of this software.
+ */
+
+package eu.darkcube.bansystem.velocity;
 
 import static com.velocitypowered.api.event.ResultedEvent.ComponentResult.denied;
-import static eu.darkcube.bansystem.BanCommands.KEY_BAN;
-import static eu.darkcube.bansystem.BanCommands.PERMISSION_BYPASS;
-import static eu.darkcube.bansystem.BanCommands.banMessage;
-import static eu.darkcube.bansystem.BanCommands.createBan;
-import static eu.darkcube.bansystem.BanCommands.createReport;
-import static eu.darkcube.bansystem.BanCommands.createUnban;
+import static eu.darkcube.bansystem.velocity.BanCommands.createBan;
+import static eu.darkcube.bansystem.velocity.BanCommands.createMute;
+import static eu.darkcube.bansystem.velocity.BanCommands.createReport;
+import static eu.darkcube.bansystem.velocity.BanCommands.createUmmute;
+import static eu.darkcube.bansystem.velocity.BanCommands.createUnban;
+import static eu.darkcube.bansystem.velocity.BanCommands.translate;
+import static eu.darkcube.bansystem.Data.KEY_BAN;
+import static eu.darkcube.bansystem.Data.banMessage;
+import static eu.darkcube.bansystem.Permissions.PERMISSION_BYPASS;
 
 import java.nio.file.Path;
 
 import com.velocitypowered.api.command.BrigadierCommand;
-import com.velocitypowered.api.command.Command;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.LoginEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -39,6 +48,8 @@ public class BanSystem {
         var commands = server.getCommandManager();
         commands.register(new BrigadierCommand(createBan(server)));
         commands.register(new BrigadierCommand(createUnban(server)));
+        commands.register(new BrigadierCommand(createMute(server)));
+        commands.register(new BrigadierCommand(createUmmute(server)));
         commands.register(new BrigadierCommand(createReport(server)));
     }
 
@@ -61,6 +72,6 @@ public class BanSystem {
         if (ban == null) {
             return; // User is not banned, return
         }
-        event.setResult(denied(banMessage(ban)));
+        event.setResult(denied(translate(banMessage(ban))));
     }
 }

@@ -1,6 +1,23 @@
-package eu.darkcube.bansystem;
+/*
+ * Copyright (c) 2024. [DarkCube]
+ * All rights reserved.
+ * You may not use or redistribute this software or any associated files without permission.
+ * The above copyright notice shall be included in all copies of this software.
+ */
 
-import static net.kyori.adventure.text.Component.newline;
+package eu.darkcube.bansystem.velocity;
+
+import static eu.darkcube.bansystem.Data.KEY_BAN;
+import static eu.darkcube.bansystem.Data.KEY_MUTE;
+import static eu.darkcube.bansystem.Data.banMessage;
+import static eu.darkcube.bansystem.Data.muteMessage;
+import static eu.darkcube.bansystem.Permissions.PERMISSION_BYPASS;
+import static eu.darkcube.bansystem.Permissions.PERMISSION_BYPASS_MUTE;
+import static eu.darkcube.bansystem.Permissions.PERMISSION_COMMAND_BAN;
+import static eu.darkcube.bansystem.Permissions.PERMISSION_COMMAND_MUTE;
+import static eu.darkcube.bansystem.Permissions.PERMISSION_COMMAND_REPORT;
+import static eu.darkcube.bansystem.Permissions.PERMISSION_COMMAND_UNBAN;
+import static eu.darkcube.bansystem.Permissions.PERMISSION_COMMAND_UNMUTE;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.DARK_PURPLE;
 import static net.kyori.adventure.text.format.NamedTextColor.GOLD;
@@ -19,20 +36,15 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
-import eu.darkcube.system.libs.net.kyori.adventure.key.Key;
-import eu.darkcube.system.libs.org.jetbrains.annotations.NotNull;
+import eu.darkcube.bansystem.Ban;
+import eu.darkcube.bansystem.Mute;
 import eu.darkcube.system.libs.org.jetbrains.annotations.Nullable;
 import eu.darkcube.system.userapi.User;
-import eu.darkcube.system.util.data.DataKey;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
 public class BanCommands {
-    public static final String PERMISSION_BYPASS = "darkcube.ban.bypass";
-    public static final String PERMISSION_COMMAND_BAN = "darkcube.command.ban";
-    public static final String PERMISSION_COMMAND_UNBAN = "darkcube.command.unban";
-    public static final String PERMISSION_COMMAND_REPORT = "darkcube.command.report";
     private static final SimpleCommandExceptionType NOT_A_VALID_SOURCE = new SimpleCommandExceptionType(() -> "You are not a valid CommandSource for this command!");
-    public static final DataKey<Ban> KEY_BAN = DataKey.ofImmutable(Key.key("bansystem", "ban"), Ban.class);
 
     public static LiteralArgumentBuilder<CommandSource> createBan(ProxyServer server) {
         var userArgument = new UserArgument(server);
@@ -57,6 +69,33 @@ public class BanCommands {
                 .then(argument("target", StringArgumentType.word())
                         .suggests(userArgument::listSuggestions)
                         .executes(ctx -> unban(userArgument, ctx))
+                );
+        // @formatter:on
+    }
+
+    public static LiteralArgumentBuilder<CommandSource> createMute(ProxyServer server) {
+        var userArgument = new UserArgument(server);
+        // @formatter:off
+        return literal("mute")
+                .requires(source -> source.hasPermission(PERMISSION_COMMAND_MUTE))
+                .then(argument("target", StringArgumentType.word())
+                        .suggests(userArgument::listSuggestions)
+                        .executes(ctx -> mute(userArgument, server, ctx, null))
+                        .then(argument("reason", StringArgumentType.greedyString())
+                                .executes(ctx -> mute(userArgument, server, ctx, StringArgumentType.getString(ctx, "reason")))
+                        )
+                );
+        // @formatter:on
+    }
+
+    public static LiteralArgumentBuilder<CommandSource> createUmmute(ProxyServer server) {
+        var userArgument = new UserArgument(server);
+        // @formatter:off
+        return literal("unmute")
+                .requires(source -> source.hasPermission(PERMISSION_COMMAND_UNMUTE))
+                .then(argument("target", StringArgumentType.word())
+                        .suggests(userArgument::listSuggestions)
+                        .executes(ctx -> unmute(userArgument, ctx))
                 );
         // @formatter:on
     }
@@ -112,7 +151,7 @@ public class BanCommands {
         var player = server.getPlayer(user.uniqueId());
         player.ifPresent(p -> {
             if (p.hasPermission(PERMISSION_BYPASS)) return;
-            p.disconnect(banMessage(ban));
+            p.disconnect(translate(banMessage(ban)));
         });
 
         var message = display(user) + " wurde von " + bannedBy;
@@ -121,6 +160,34 @@ public class BanCommands {
         DiscordIntegration.banLog(message);
         source.sendMessage(text(display(user) + " was banned!"));
         return 0;
+    }
+
+    private static int mute(UserArgument userArgument, ProxyServer server, CommandContext<CommandSource> context, @Nullable String reason) throws CommandSyntaxException {
+        var userInput = context.getArgument("target", String.class);
+        var user = userArgument.parse(new StringReader(userInput));
+        var source = context.getSource();
+        var mutedBy = name(source);
+        if (mutedBy == null) throw NOT_A_VALID_SOURCE.create();
+
+        var mute = new Mute(mutedBy, reason);
+        user.persistentData().set(KEY_MUTE, mute);
+
+        var player = server.getPlayer(user.uniqueId());
+        player.ifPresent(p -> {
+            if (p.hasPermission(PERMISSION_BYPASS_MUTE)) return;
+            p.sendMessage(translate(muteMessage(mute)));
+        });
+
+        var message = display(user) + " wurde von " + mutedBy;
+        if (reason != null) message += " für " + reason;
+        message += " gemuted.";
+        DiscordIntegration.banLog(message);
+        source.sendMessage(text(display(user) + " was muted!"));
+        return 0;
+    }
+
+    public static Component translate(eu.darkcube.system.libs.net.kyori.adventure.text.Component o) {
+        return GsonComponentSerializer.gson().deserialize(eu.darkcube.system.libs.net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().serialize(o));
     }
 
     private static int unban(UserArgument userArgument, CommandContext<CommandSource> context) throws CommandSyntaxException {
@@ -133,6 +200,19 @@ public class BanCommands {
 
         DiscordIntegration.banLog(display(user) + " wurde von " + unbannedBy + " entbannt.");
         context.getSource().sendMessage(text(display(user) + " was unbanned!"));
+        return 0;
+    }
+
+    private static int unmute(UserArgument userArgument, CommandContext<CommandSource> context) throws CommandSyntaxException {
+        var userInput = context.getArgument("target", String.class);
+        var user = userArgument.parse(new StringReader(userInput));
+        var source = context.getSource();
+        var unmutedBy = name(source);
+        if (unmutedBy == null) throw NOT_A_VALID_SOURCE.create();
+        user.persistentData().remove(KEY_MUTE);
+
+        DiscordIntegration.banLog(display(user) + " wurde von " + unmutedBy + " entmuted.");
+        context.getSource().sendMessage(text(display(user) + " was unmuted!"));
         return 0;
     }
 
@@ -153,27 +233,11 @@ public class BanCommands {
         return null;
     }
 
-    public static Component banMessage(Ban ban) {
-        if (ban == null) {
-            return text("You have been banned!");
-        }
-        var message = text("You have been banned!", RED);
-        if (ban.reason != null) {
-            message = message.append(newline()).append(text("Reason: ", RED).append(text(ban.reason, GOLD)));
-        }
-        message = message.append(newline()).append(newline());
-        message = message.append(text("You can appeal at", RED)).append(newline()).append(text("https://discord.darkcube.eu/", DARK_PURPLE));
-        return message;
-    }
-
     public static LiteralArgumentBuilder<CommandSource> literal(String name) {
         return LiteralArgumentBuilder.literal(name);
     }
 
     public static RequiredArgumentBuilder<CommandSource, ?> argument(String name, ArgumentType<?> type) {
         return RequiredArgumentBuilder.argument(name, type);
-    }
-
-    public record Ban(@NotNull String bannedBy, @Nullable String reason) {
     }
 }
