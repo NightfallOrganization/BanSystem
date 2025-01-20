@@ -1,7 +1,7 @@
 [versions]
 velocity = "3.1.1"
-darkcubesystem = "1.0.31"
-cloudnet = "4.0.0-RC11-SNAPSHOT"
+darkcubesystem = "1.0.36"
+cloudnet = "4.0.0-RC12-SNAPSHOT"
 discordbot-api = "1.0.2"
 paper = "1.21.1-R0.1-SNAPSHOT"
 
@@ -10,8 +10,9 @@ shadow = "8.3.1"
 [libraries]
 velocity = { group = "com.velocitypowered", name = "velocity-api", version.ref = "velocity" }
 darkcubesystem-api = { group = "eu.darkcube.system", name = "darkcubesystem-api", version.ref = "darkcubesystem" }
-cloudnet-bridge = { group = "eu.darkcube.cloudnetservice.cloudnet", name = "bridge", version.ref = "cloudnet" }
-cloudnet-driver = { group = "eu.darkcube.cloudnetservice.cloudnet", name = "driver", version.ref = "cloudnet" }
+cloudnet-bridge-impl = { group = "eu.darkcube.cloudnetservice.cloudnet", name = "bridge-impl", version.ref = "cloudnet" }
+cloudnet-driver-impl = { group = "eu.darkcube.cloudnetservice.cloudnet", name = "driver-impl", version.ref = "cloudnet" }
+cloudnet-driver-api = { group = "eu.darkcube.cloudnetservice.cloudnet", name = "driver-api", version.ref = "cloudnet" }
 discordbot-api = { group = "eu.darkcube.discordbot", name = "api", version.ref = "discordbot-api" }
 paper-api = {group = "io.papermc.paper", name = "paper-api", version.ref="paper" }
 

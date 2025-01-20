@@ -1,42 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "github>NightfallOrganization/renovate-template"
   ],
-  "hostRules": [
-    {
-      "matchHost": "https://nexus.darkcube.eu/repository/darkcube-group/",
-      "username": "powerless",
-      "hostType": "maven",
-      "encrypted": {
-        "password": "wcFMA/xDdHCJBTolARAAjQzruwQd+p9MGGIT9zB+A0iM1YdRcEbSEhYpX5TwK6/DRx1rUBAs7551yaP5QEIroHBH5erW0jXZYWsWVbFNnCod9WPa7g0Eaagtsvy58GW6b14obBpQsL6WeWr02wG2cj2RHbZWrT5r0e5WUUdLPeotupfzjOv6gMGHqSLfLG89xGjNtoaDlH/OAJ83+i+GymxsjiFfbgVg7tap6uvVuvAx/4ddwJadp71kIWqMrDi2bOsPM0nT98BPbzAovUYe7Eyv0KtpVqELnV3iyo05QehW3yY4bPZh/b87Ciqar4wKnZWWTjZ3LH+dJ4HOfzFizHxyilelve6ukHdq737I0yOEclILNzggeYHTTQFAUYQoAvAnEksDBcTwWGGsQrY1ml8QOz+JRiuyRPsursBcesH0+X8NkRhLv1+OGrd3N1VdM4tiiN3HAJh6Sq0e+fyD4oLZCPYtU7c+xPV4juTeBvIUp16bjoJyFzlQYwpJgWSabL1aZ2z+BLfC1srGDIIQ1kMDiebB/IdkxfwNKfn+R9G7V7y3V0wvbdnZeUhplRf69dAIUF1HCf4lDn+acxWdm4/4+850rKxnBs1T4ujOaHwcjuPYvoRgeKfH1B3WztUpPfUMN2Hfi1n5T+V8CuRLKdUFzeUSESKn1syfgUWpqYUPOROy7YGKAZH5IpHg7U/SbQEet7NojSxVeLhru7aEY87Rs32V6jL07gbobv27DQxDNNtsH85FGqW2RWDmNcYDXcMyuuQ12yuzaD/5K5jz5nvXh5OZ3H1cd7WssVcefr2CytOFvI3lh4IzsP6LOs1ERK8WS/FFlsaHA33MgVY"
-      }
-    },
-    {
-      "matchHost": "https://repo1.maven.org/maven2/",
-      "enabled": false
-    },
-    {
-      "matchHost": "docker.io",
-      "enabled": false
-    },
-    {
-      "matchHost": "api.github.com",
-      "enabled": false
-    },
-    {
-      "matchHost": "github.com",
-      "enabled": false
-    }
-  ],
-  "packageRules": [
-    {
-      "matchManagers": [
-        "gradle"
-      ],
-      "registryUrls": [
-        "https://nexus.darkcube.eu/repository/darkcube-group/"
-      ]
-    }
+  "ignoreDeps": [
+    "implementation:bukkit"
   ]
 }

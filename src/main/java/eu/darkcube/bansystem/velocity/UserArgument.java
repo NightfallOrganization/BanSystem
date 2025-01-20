@@ -28,7 +28,7 @@ import eu.darkcube.system.userapi.UserAPI;
 
 public class UserArgument implements ArgumentType<User> {
     private static final DynamicCommandExceptionType INVALID_PLAYER = new DynamicCommandExceptionType(player -> () -> "Invalid player: " + player);
-    private static final PlayerManager PLAYER_MANAGER = InjectionLayer.boot().instance(ServiceRegistry.class).firstProvider(PlayerManager.class);
+    private static final PlayerManager PLAYER_MANAGER = InjectionLayer.boot().instance(ServiceRegistry.class).defaultInstance(PlayerManager.class);
     private final ProxyServer server;
 
     public UserArgument(ProxyServer server) {

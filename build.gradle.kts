@@ -28,7 +28,8 @@ dependencies {
     compileOnly(libs.velocity)
     compileOnly(libs.paper.api)
     compileOnly(libs.darkcubesystem.api)
-    compileOnly(libs.cloudnet.bridge)
-    compileOnly(libs.cloudnet.driver)
+    compileOnly(libs.cloudnet.bridge.impl)
+    compileOnly(libs.cloudnet.driver.impl)
+    compileOnly(libs.cloudnet.driver.api)
     implementation(libs.discordbot.api)
 }
