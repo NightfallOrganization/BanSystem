@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BanSystemBukkit extends JavaPlugin implements Listener {
@@ -24,8 +25,26 @@ public class BanSystemBukkit extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
     }
 
+    @EventHandler
+    public void handle(PlayerCommandPreprocessEvent event) {
+        var player = event.getPlayer();
+        if (player.hasPermission(PERMISSION_BYPASS_MUTE)) {
+            return;
+        }
+        var msg = event.getMessage();
+        if (msg.startsWith("/msg ") || msg.startsWith("/w ") || msg.startsWith("/tell ")) {
+            var user = UserAPI.instance().user(player.getUniqueId());
+            var mute = user.persistentData().get(KEY_MUTE);
+            if (mute == null) {
+                return;
+            }
+            event.setCancelled(true);
+            user.sendMessage(muteMessage(mute));
+        }
+    }
+
     @EventHandler(priority = EventPriority.LOW)
-    public void register(AsyncPlayerChatEvent event) {
+    public void handle(AsyncPlayerChatEvent event) {
         var player = event.getPlayer();
 
         if (player.hasPermission(PERMISSION_BYPASS_MUTE)) {
