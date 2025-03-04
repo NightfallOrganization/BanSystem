@@ -1,6 +1,6 @@
 [versions]
 velocity = "3.1.1"
-darkcubesystem = "1.1.4"
+darkcubesystem = "1.1.6"
 cloudnet = "4.0.0-RC12-SNAPSHOT"
 discordbot-api = "1.0.2"
 paper = "1.21.1-R0.1-SNAPSHOT"
