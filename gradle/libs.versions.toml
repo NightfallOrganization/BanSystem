@@ -5,7 +5,7 @@ cloudnet = "4.0.0-RC12-SNAPSHOT"
 discordbot-api = "1.0.5"
 paper = "1.21.1-R0.1-SNAPSHOT"
 
-shadow = "8.3.6"
+shadow = "8.3.7"
 
 [libraries]
 velocity = { group = "com.velocitypowered", name = "velocity-api", version.ref = "velocity" }
