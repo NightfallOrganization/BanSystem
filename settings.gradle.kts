@@ -18,7 +18,7 @@ pluginManagement {
 }
 
 plugins {
-    id("eu.darkcube.darkcube.settings") version "1.9.4"
+    id("eu.darkcube.darkcube.settings") version "1.10.3"
 }
 
 rootProject.name = "BanSystem"
